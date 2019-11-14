@@ -61,6 +61,7 @@ class AdminUserController extends Controller
         $request->user()->authorizeRoles([ 'user_administrators']);
 
         $user = User::find($id);
+
         return view('admin.edit',compact('user'));
 
     }
@@ -87,7 +88,7 @@ class AdminUserController extends Controller
                     ]
             );
         User::where('id',$id)->first()->roles()->sync($request->type);
-
+        $request->session()->flash('status', 'You updated a user successfully!');
         return redirect('/admin/users');
     }
 
@@ -104,6 +105,8 @@ class AdminUserController extends Controller
 //            User::find($id)->delete();
             User::where('id',$id)->update(['deleted_by' => Auth::id()]);
             User::find($id)->delete();
+            $request->session()->flash('status', 'You deleted a user successfully!');
+
             return redirect('/admin/users');
         }
 

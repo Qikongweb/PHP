@@ -2,6 +2,12 @@
 
 @section('users')
 
+@if (session('status'))
+    <div class="alert alert-dismissible alert-warning alert-danger" role="alert">
+        {{ session('status') }}
+    </div>
+@endif
+
 <h1 class="card-title">Users Administration</h1>
 <form class="form-inline my-2 my-lg-0" action="/admin/users/search" method="post">
 

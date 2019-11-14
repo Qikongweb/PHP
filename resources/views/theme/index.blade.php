@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
+
 @section('users')
+
+
+    @if (session('status'))
+        <div class="alert alert-dismissible alert-warning alert-danger" role="alert">
+            {{ session('status') }}
+        </div>
+    @endif
 
 <h1 class="card-title">Bootstrap Themes Administration</h1>
 
@@ -21,7 +29,7 @@
     <tr class="{{ $key%2 == 0 ? 'table-active':'' }}">
         <th scope="row">{{ $theme->name }}</th>
         <td>{{ $theme->url }}</td>
-        <td>{{ $theme->isDefault }}</td>
+        <td>{{ $theme->isDefault ? 'Yes' : 'No' }}</td>
         <td>
             <button type="button" class="btn btn-success"><a href="/admin/themes/{{ $theme->id }}/edit">Edit</a></button>
             <form action='/admin/themes/{{ $theme->id }}' method="post" class="d-inline" >

@@ -20,12 +20,7 @@ class AdminSearchController extends Controller
         $request->flash();
 
         $users = User::where('name','LIKE','%'.$str.'%')->orWhere('email','LIKE','%'.$str.'%')->get();
-        return view('admin.index',
-            [
-                'users' => $users,
-                'str' => $str
-            ]
-        );
+        return view('admin.index',compact('users'));
     }
 
 

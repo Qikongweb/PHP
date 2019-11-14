@@ -19,6 +19,13 @@
 @extends('layouts.app')
 
 @section('users')
+    @if (session('theme_create'))
+        <div class="alert alert-dismissible alert-warning alert-danger" role="alert">
+            {{ session('theme_create') }}
+        </div>
+    @endif
+
+
 
 <h1 class="card-title">Users Administration - Edit</h1>
 
@@ -31,14 +38,14 @@
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="name" value="{{ $user->name }}" name="name">
+                <input type="text" class="form-control" id="name" value="{{ old('name',$user->name) }}" name="name">
             </div>
         </div>
 
         <div class="form-group row">
             <label for="email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
-                <input type="email" class="form-control " id="email" aria-describedby="emailHelp" value="{{ $user->email }}" name="email">
+                <input type="email" class="form-control " id="email" aria-describedby="emailHelp" value="{{ old('email',$user->email) }}" name="email">
             </div>
         </div>
 

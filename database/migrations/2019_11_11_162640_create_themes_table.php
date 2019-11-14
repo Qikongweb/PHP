@@ -17,9 +17,11 @@ class CreateThemesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('url');
-            $table->string('isDefault')->default('No');
+            $table->boolean('isDefault')->default(false);
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('last_modified_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

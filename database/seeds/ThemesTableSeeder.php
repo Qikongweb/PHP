@@ -13,9 +13,9 @@ class ThemesTableSeeder extends Seeder
     public function run()
     {
         DB::table('themes')->insert([
-            'name' => 'Boostrap',
-            'url' => 'http://ab.com',
-            'isDefault' => "Yes",
+            'name' => 'Cerulean',
+            'url' => 'https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cerulean/bootstrap.min.css',
+            'isDefault' => True,
             'created_by' => 1,
             'last_modified_by' => 1,
             'created_at' => Carbon\Carbon::now(),
@@ -23,9 +23,9 @@ class ThemesTableSeeder extends Seeder
         ]);
 
         DB::table('themes')->insert([
-            'name' => 'Boostrap2',
-            'url' => 'http://ab.com',
-            'isDefault' => 'No',
+            'name' => 'Cosmo',
+            'url' => 'https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cosmo/bootstrap.min.css',
+            'isDefault' => False,
             'created_by' => 1,
             'last_modified_by' => 1,
             'created_at' => Carbon\Carbon::now(),
@@ -33,9 +33,19 @@ class ThemesTableSeeder extends Seeder
         ]);
 
         DB::table('themes')->insert([
-            'name' => 'Boostrap3',
-            'url' => 'http://ab.com',
-            'isDefault' => 'No',
+            'name' => 'Cyborg',
+            'url' => 'https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/cyborg/bootstrap.min.css',
+            'isDefault' => False,
+            'created_by' => 1,
+            'last_modified_by' => 1,
+            'created_at' => Carbon\Carbon::now(),
+            'updated_at' => Carbon\Carbon::now(),
+        ]);
+
+        DB::table('themes')->insert([
+            'name' => 'Darkly',
+            'url' => 'https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css',
+            'isDefault' => False,
             'created_by' => 1,
             'last_modified_by' => 1,
             'created_at' => Carbon\Carbon::now(),
