@@ -18,8 +18,8 @@ class CreateThemesTable extends Migration
             $table->string('name');
             $table->string('url');
             $table->string('isDefault')->default('No');
-            $table->string('created_by');
-            $table->string('last_modified_by')->nullable();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('last_modified_by')->nullable();
             $table->timestamps();
         });
     }

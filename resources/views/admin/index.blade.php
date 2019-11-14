@@ -32,7 +32,7 @@
                 @method('DELETE')
                 @csrf
 
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')">Delete</button>
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')" {{ $user->id === 1 ? 'disabled':'' }}>Delete</button>
 
             </form>
 

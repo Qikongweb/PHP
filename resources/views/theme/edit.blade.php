@@ -12,13 +12,13 @@
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="name" value="{{ $theme->name }}" name="name">
+                <input type="text" class="form-control" id="name" value="{{ old('name', $theme->name)}}" name="name">
             </div>
         </div>
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">CDN Url</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control"  value="{{ $theme->url }}" name="url">
+                <input type="text" class="form-control"  value="{{ old('url',$theme->url) }}" name="url">
             </div>
         </div>
         <div class="form-group row">
@@ -29,6 +29,7 @@
         </div>
 
         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Update</button>
+        @include('errors')
     </form>
 
 @endsection

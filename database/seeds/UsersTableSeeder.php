@@ -13,31 +13,31 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'Mike',
-            'email' => 'mike'.'@gmail.com',
-            'password' => bcrypt('password'),
-            'created_by' => 'Mike',
-            'last_modified_by' => 'Mike',
+            'name' => 'Claire_admin',
+            'email' => 'claire'.'@example.com',
+            'password' => bcrypt('123456'),
+            'created_by' => 1,
+            'last_modified_by' => 1,
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);
 
         DB::table('users')->insert([
-            'name' => 'Claire',
-            'email' => 'claire'.'@gmail.com',
-            'password' => bcrypt('password'),
-            'created_by' => 'Claire',
-            'last_modified_by' => 'Claire',
+            'name' => 'Mike_admin',
+            'email' => 'mike'.'@example.com',
+            'password' => bcrypt('123456'),
+            'created_by' => 2,
+            'last_modified_by' => 2,
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);
 
         DB::table('users')->insert([
             'name' => 'Joe',
-            'email' => 'joe'.'@gmail.com',
-            'password' => bcrypt('password'),
-            'created_by' => 'Joe',
-            'last_modified_by' => 'Joe',
+            'email' => 'joe'.'@example.com',
+            'password' => bcrypt('123456'),
+            'created_by' => 3,
+            'last_modified_by' => 3,
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);
@@ -45,9 +45,9 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'test',
             'email' => 'test'.'@example.com',
-            'password' => bcrypt('password'),
-            'created_by' => 'test',
-            'last_modified_by' => 'test',
+            'password' => bcrypt('123456'),
+            'created_by' => 4,
+            'last_modified_by' => 4,
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);

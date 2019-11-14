@@ -40,31 +40,34 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        @guest
-
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    Admin <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @if(App\User::first()->isUserAdmin())
-                                    <a class="dropdown-item" href="{{ route('user') }}"
-                                       >
-                                        User Administrator
-                                    </a>
-                                    @endif
-
-                                    <a class="dropdown-item" href="{{ route('theme') }}"
-                                       >
-                                        Theme Manager
+{{--                        //first time not user--}}
+                        @if(app('request')->user() !== null)
+                            @if(app('request')->user()->hasAnyRole(['user_administrators','theme_manager','post_moderator']) )
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Admin <span class="caret"></span>
                                     </a>
 
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        @if(app('request')->user()->hasRole('user_administrators'))
 
-                                </div>
-                            </li>
-                        @endguest
+                                        <a class="dropdown-item" href="{{ route('user') }}"
+                                           >
+                                            User Administrator
+                                        </a>
+                                        @endif
+                                        @if (app('request')->user()->hasRole('theme_manager'))
+
+                                        <a class="dropdown-item" href="{{ route('theme') }}"
+                                           >
+                                            Theme Manager
+                                        </a>
+                                        @endif
+
+                                    </div>
+                                </li>
+                            @endif
+                        @endif
                     </ul>
                     <ul class="navbar-nav ml-auto">
 

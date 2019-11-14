@@ -31,8 +31,8 @@
                 @method('DELETE')
                 @csrf
 
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')" {{ $theme->isDefault === 'Yes'? 'disabled':'' }}>Delete</button>
-
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')" >Delete</button>
+{{--                where('to_be_used_by_user_id', '!=' , 2)--}}
             </form>
 
         </td>

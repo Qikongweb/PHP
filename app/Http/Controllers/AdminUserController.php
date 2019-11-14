@@ -21,23 +21,20 @@ class AdminUserController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
+//        return dd(app('request'));
+        $request->user()->authorizeRoles(['user_administrators']);
 
-        if($this->isUserAdmin())
-        {
-            //$users = User::all();
-            $users = \DB::table('users')
-                    ->join('role_user', 'users.id', '=', 'role_user.user_id')
-                    ->select('users.id','users.name','users.email')
-                    ->groupBy('users.id')
-                    ->get();
+        $users = \DB::table('users')
 
-            return view('admin.index',compact('users'));
-        }
-        else{
-            return abort(403);
-        }
+                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                ->select('users.id','users.name','users.email')
+                ->whereNull('deleted_at')
+                ->groupBy('users.id')
+                ->get();
+
+        return view('admin.index',compact('users'));
 
     }
 
@@ -59,16 +56,12 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
-        if($this->isUserAdmin())
-        {
-            $user = User::find($id);
-            return view('admin.edit',compact('user'));
-        }
-        else{
-            return abort(403);
-        }
+        $request->user()->authorizeRoles([ 'user_administrators']);
+
+        $user = User::find($id);
+        return view('admin.edit',compact('user'));
 
     }
 
@@ -82,12 +75,15 @@ class AdminUserController extends Controller
     public function update(Request $request, $id)
     {
         $this->validateUser();
+
+        $request->user()->authorizeRoles([ 'user_administrators']);
+
         User::where('id', $id)
             ->update(
                 [
                     'name' => $request->name,
                     'email'=>$request->email,
-                    'last_modified_by' => Auth::user()->name,
+                    'last_modified_by' => Auth::id(),
                     ]
             );
         User::where('id',$id)->first()->roles()->sync($request->type);
@@ -101,10 +97,16 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        User::find($id)->delete();
-        return redirect('/admin/users');
+        $request->user()->authorizeRoles(['user_administrators']);
+        if($id !== 1){
+//            User::find($id)->delete();
+            User::where('id',$id)->update(['deleted_by' => Auth::id()]);
+            User::find($id)->delete();
+            return redirect('/admin/users');
+        }
+
     }
 
     protected function validateUser()
@@ -116,9 +118,5 @@ class AdminUserController extends Controller
         ]);
     }
 
-    protected function isUserAdmin()
-    {
-        return in_array('user_administrators',User::find(Auth::id())->roles->pluck('type')->toArray());
 
-    }
 }

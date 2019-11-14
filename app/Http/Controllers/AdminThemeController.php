@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Theme;
 use Illuminate\Support\Facades\Auth;
-
+use DB;
 class AdminThemeController extends Controller
 {
     public function __construct()
@@ -18,8 +18,10 @@ class AdminThemeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $request->user()->authorizeRoles(['theme_manager']);
+
         $themes = Theme::all();
 
         return view('theme.index',compact('themes'));
@@ -30,8 +32,9 @@ class AdminThemeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $request->user()->authorizeRoles(['theme_manager']);
         return view('theme.create');
     }
 
@@ -44,12 +47,16 @@ class AdminThemeController extends Controller
     public function store(Request $request)
     {
 
+        $request->user()->authorizeRoles(['theme_manager']);
+
+        $this->validateTheme();
+
         Theme::create([
             'name' => $request->name,
             'url' => $request->url,
             'isDefault' => $request->isDefault ? $request->isDefault:'No',
-            'created_by' => Auth::user()->name,
-            'last_modified_by' => Auth::user()->name,
+            'created_by' => Auth::id(),
+            'last_modified_by' => Auth::id(),
 
         ]);
 
@@ -63,8 +70,9 @@ class AdminThemeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
+        $request->user()->authorizeRoles(['theme_manager']);
         $theme = Theme::find($id);
         return view('theme.edit',compact('theme'));
 
@@ -79,15 +87,22 @@ class AdminThemeController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        return dd('Hello');
-        Theme::where('id', $id)
-            ->update(['name' => $request->name,
-                    'url'=>$request->url,
-                    'isDefault' => $request->isDefault ? $request->isDefault:'No',
-                    'last_modified_by' => Auth::user()->name,
+        $request->user()->authorizeRoles(['theme_manager']);
 
-                ]
-            );
+        $this->validateTheme();
+
+        if($this->isDefaultHasYes($request))
+        {
+            Theme::where('id', $id)
+                ->update(['name' => $request->name,
+                        'url'=>$request->url,
+                        'isDefault' => $request->isDefault ? $request->isDefault:'No',
+                        'last_modified_by' => Auth::id(),
+
+                    ]
+                );
+        }
+
 
         return redirect('/admin/themes');
     }
@@ -98,9 +113,35 @@ class AdminThemeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Theme::find($id)->delete();
+        $request->user()->authorizeRoles(['theme_manager']);
+        $t = Theme::find($id);
+        if($t->isDefault !== 'Yes'){
+//            $t->delete();
+            $t->softDeletes();
+        }
+//        Theme::find($id)->delete();
         return redirect('/admin/themes');
+    }
+
+    protected function validateTheme()
+    {
+        $regex = '/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/';
+
+        return request()->validate([
+            'name' => ['required'],
+            'url' => ['required','regex:' . $regex],
+        ]);
+    }
+
+    protected function isDefaultHasYes(Request $request){
+       if($request->isDefault === 'Yes' AND \DB::table('themes')->where('isDefault', '=', 'Yes')->get()->isEmpty())
+       {
+           return true;
+       }
+        else if($request->isDefault !== 'Yes'){
+            return true;
+        }
     }
 }

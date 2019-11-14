@@ -16,26 +16,28 @@ class ThemesTableSeeder extends Seeder
             'name' => 'Boostrap',
             'url' => 'http://ab.com',
             'isDefault' => "Yes",
-            'created_by' => 'Mike',
-            'last_modified_by' => 'Mike',
+            'created_by' => 1,
+            'last_modified_by' => 1,
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);
+
         DB::table('themes')->insert([
             'name' => 'Boostrap2',
             'url' => 'http://ab.com',
             'isDefault' => 'No',
-            'created_by' => 'Mike',
-            'last_modified_by' => 'Mike',
+            'created_by' => 1,
+            'last_modified_by' => 1,
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);
+
         DB::table('themes')->insert([
             'name' => 'Boostrap3',
             'url' => 'http://ab.com',
             'isDefault' => 'No',
-            'created_by' => 'Mike',
-            'last_modified_by' => 'Mike',
+            'created_by' => 1,
+            'last_modified_by' => 1,
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);

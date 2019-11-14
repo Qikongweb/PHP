@@ -14,15 +14,15 @@ class RolesTableSeeder extends Seeder
     {
 
         DB::table('roles')->insert([
-            'type' => 'post_moderator',
+            'name' => 'post_moderator',
 
         ]);
         DB::table('roles')->insert([
-            'type' => 'theme_manager',
+            'name' => 'theme_manager',
 
         ]);
         DB::table('roles')->insert([
-            'type' => 'user_administrators',
+            'name' => 'user_administrators',
 
         ]);
     }
