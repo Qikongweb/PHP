@@ -12,14 +12,19 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect( '/feed');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home',function (){
+    return redirect('feed');
+});
 
-Route::get('/feed','FeedController@index');
+Route::get('/feed','PostController@index');
+
+Route::resource('/posts', 'PostController');
 
 Route::resource('/admin/users','AdminUserController',['names' => [
     'index' => 'user'

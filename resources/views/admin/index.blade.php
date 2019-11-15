@@ -30,7 +30,7 @@
         <th scope="row">{{ $user->name }}</th>
         <td>{{ $user->email }}</td>
         <td>
-            <button type="button" class="btn btn-success"><a href="/admin/users/{{ $user->id }}/edit">Edit</a></button>
+            <button type="button" class="btn btn-success"><a href="/admin/users/{{ $user->id }}/edit" class="">Edit</a></button>
             <form action='/admin/users/{{ $user->id }}' method="post" class="d-inline" >
 
                 {{ method_field('DELETE') }}

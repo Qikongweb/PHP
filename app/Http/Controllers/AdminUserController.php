@@ -109,6 +109,9 @@ class AdminUserController extends Controller
 
             return redirect('/admin/users');
         }
+        else {
+            return redirect()->back()->withErrors('error','You cannot delete a root user!');
+        }
 
     }
 
