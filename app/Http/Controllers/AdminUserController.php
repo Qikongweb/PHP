@@ -23,16 +23,22 @@ class AdminUserController extends Controller
 
     public function index(Request $request)
     {
-//        return dd(app('request'));
         $request->user()->authorizeRoles(['user_administrators']);
 
-        $users = \DB::table('users')
+//        $users = \DB::table('users')
+//                ->join('role_user', 'users.id', '=', 'role_user.user_id')
+//                ->select('users.id','users.name','users.email')
+//                ->whereNull('deleted_at')
+//                ->groupBy('users.id')
+//                ->get();
 
-                ->join('role_user', 'users.id', '=', 'role_user.user_id')
-                ->select('users.id','users.name','users.email')
-                ->whereNull('deleted_at')
-                ->groupBy('users.id')
-                ->get();
+        $users = User::whereHas('roles', function ($q) {
+            //conditions from role table
+            $q->Where('name', 'user_administrators')
+                ->orWhere('name', 'theme_manager')
+                ->orWhere('name', 'post_moderator');
+
+        })->get();
 
         return view('admin.index',compact('users'));
 
@@ -40,27 +46,14 @@ class AdminUserController extends Controller
 
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$id)
+    public function edit(Request $request, User $user)
     {
         $request->user()->authorizeRoles([ 'user_administrators']);
-
-        $user = User::find($id);
 
         return view('admin.edit',compact('user'));
 
@@ -73,21 +66,20 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        $this->validateUser();
-
         $request->user()->authorizeRoles([ 'user_administrators']);
 
-        User::where('id', $id)
-            ->update(
+        $this->validateUser();
+        $user->update(
                 [
                     'name' => $request->name,
                     'email'=>$request->email,
                     'last_modified_by' => Auth::id(),
                     ]
             );
-        User::where('id',$id)->first()->roles()->sync($request->type);
+        $user->roles()->sync($request->type);
+
         $request->session()->flash('status', 'You updated a user successfully!');
         return redirect('/admin/users');
     }
@@ -98,13 +90,14 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, User $user)
     {
         $request->user()->authorizeRoles(['user_administrators']);
-        if($id !== 1){
-//            User::find($id)->delete();
-            User::where('id',$id)->update(['deleted_by' => Auth::id()]);
-            User::find($id)->delete();
+        if($user->id !== 1){
+
+            $user->update(['deleted_by' => Auth::id()]);
+            $user->delete();
+
             $request->session()->flash('status', 'You deleted a user successfully!');
 
             return redirect('/admin/users');

@@ -51,5 +51,37 @@ class ThemesTableSeeder extends Seeder
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);
+
+        DB::table('themes')->insert([
+            'name' => 'Flatly',
+            'url' => 'https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/flatly/bootstrap.min.css',
+            'isDefault' => False,
+            'created_by' => 1,
+            'last_modified_by' => 1,
+            'created_at' => Carbon\Carbon::now(),
+            'updated_at' => Carbon\Carbon::now(),
+        ]);
+
+        DB::table('themes')->insert([
+            'name' => 'Journal',
+            'url' => 'https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/journal/bootstrap.min.css',
+            'isDefault' => False,
+            'created_by' => 1,
+            'last_modified_by' => 1,
+            'created_at' => Carbon\Carbon::now(),
+            'updated_at' => Carbon\Carbon::now(),
+        ]);
+
+        DB::table('themes')->insert([
+            'name' => 'Lumen',
+            'url' => 'https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/lumen/bootstrap.min.css',
+            'isDefault' => False,
+            'created_by' => 1,
+            'last_modified_by' => 1,
+            'created_at' => Carbon\Carbon::now(),
+            'updated_at' => Carbon\Carbon::now(),
+        ]);
+
+
     }
 }

@@ -33,8 +33,8 @@ class UsersTableSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'name' => 'Joe',
-            'email' => 'joe'.'@example.com',
+            'name' => 'Woojin_admin',
+            'email' => 'Woojin'.'@example.com',
             'password' => bcrypt('123456'),
             'created_by' => 3,
             'last_modified_by' => 3,
@@ -43,11 +43,21 @@ class UsersTableSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'name' => 'test',
-            'email' => 'test'.'@example.com',
+            'name' => 'Hana_admin',
+            'email' => 'hana'.'@example.com',
             'password' => bcrypt('123456'),
             'created_by' => 4,
             'last_modified_by' => 4,
+            'created_at' => Carbon\Carbon::now(),
+            'updated_at' => Carbon\Carbon::now(),
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'Joe',
+            'email' => 'Joe'.'@example.com',
+            'password' => bcrypt('123456'),
+            'created_by' => 5,
+            'last_modified_by' => 5,
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);

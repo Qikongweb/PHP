@@ -1,20 +1,14 @@
 @extends('layouts.app')
 
-
 @section('users')
 
-
-    @if (session('status'))
-        <div class="alert alert-dismissible alert-warning alert-danger" role="alert">
-            {{ session('status') }}
-        </div>
-    @endif
+@include('message')
 
 <h1 class="card-title">Bootstrap Themes Administration</h1>
 
     {{ csrf_field() }}
 
-<button type="button" class="btn btn-info"><a href="{{ route('create') }}">Create New</a></button>
+<button type="button" class="btn btn-info"><a href="{{ route('create') }}" class="nav-link">Create New</a></button>
 <table class="table table-hover">
     <thead>
     <tr>

@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Update</button>
+        <button class="btn btn-primary my-2 my-sm-0" type="submit">Update</button>
         @include('errors')
     </form>
 

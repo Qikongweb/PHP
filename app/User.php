@@ -44,30 +44,53 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Role');
     }
 
+    // relationship with theme
+    public function themeCreate()
+    {
+        return $this->hasMany('App\Theme','created_by');
+    }
+
+    public function themeModify()
+    {
+        return $this->hasMany('App\Theme','last_modified_by');
+    }
+
+    public function themeDelete()
+    {
+        return $this->hasMany('App\Theme','deleted_by');
+    }
+
+    // relationship with post
+    public function postCreate()
+    {
+        return $this->hasMany('App\Post','created_by');
+    }
+
+    public function postModify()
+    {
+        return $this->hasMany('App\Post','last_modified_by');
+    }
+
+    public function postDelete()
+    {
+        return $this->hasMany('App\Post','deleted_by');
+    }
+
+
     // set the checkbox
-    public function is($roleID)
+    public function is($roleName)
     {
         foreach ($this->roles()->get() as $role)
         {
-            if ($role->id == $roleID)
+            if ($role->name == $roleName)
             {
                 return true;
             }
         }
-
         return false;
     }
 
-
-    public function isUserAdmin()
-    {
-        return in_array('user_administrators',User::find(Auth::id())->roles->pluck('type')->toArray());
-
-    }
-
-    /**
-     * @param string|array $roles
-     */
+    // check it is admin
     public function authorizeRoles($roles)
     {
         if (is_array($roles)) {
@@ -77,18 +100,14 @@ class User extends Authenticatable
         return $this->hasRole($roles) ||
             abort(401, 'This action is unauthorized.');
     }
-    /**
-     * Check multiple roles
-     * @param array $roles
-     */
+
+    // check it has many role
     public function hasAnyRole($roles)
     {
         return null !== $this->roles()->whereIn('name', $roles)->first();
     }
-    /**
-     * Check one role
-     * @param string $role
-     */
+
+    // check it has one role
     public function hasRole($role)
     {
         return null !== $this->roles()->where('name', $role)->first();

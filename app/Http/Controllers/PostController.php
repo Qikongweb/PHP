@@ -23,7 +23,6 @@ class PostController extends Controller
     {
 
         $posts = \DB::table('posts')
-
             ->join('users', 'users.id', '=', 'posts.created_by')
             ->select('posts.id','posts.title','posts.caption','posts.image_url','posts.created_at','users.name')
             ->whereNull('posts.deleted_at')
@@ -70,17 +69,13 @@ class PostController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request,$id)
+
+    public function destroy(Request $request,Post $post)
     {
         $request->user()->authorizeRoles(['post_moderator']);
-        Post::where('id',$id)->update(['deleted_by' => Auth::id()]);
-        Post::find($id)->delete();
+
+        $post->update(['deleted_by' => Auth::id()]);
+        $post->delete();
 
         $request->session()->flash('status', 'You deleted a post successfully!');
         return redirect('/feed');

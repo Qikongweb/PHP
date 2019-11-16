@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Theme;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use App\User;
 
 class AdminThemeController extends Controller
 {
@@ -22,9 +23,7 @@ class AdminThemeController extends Controller
     public function index(Request $request)
     {
         $request->user()->authorizeRoles(['theme_manager']);
-
         $themes = Theme::all();
-
         return view('theme.index',compact('themes'));
     }
 
@@ -52,27 +51,23 @@ class AdminThemeController extends Controller
 
         $this->validateTheme();
 
-        if($this->isDefaultHasYes( $request)){
-            Theme::create([
-                'name' => $request->name,
-                'url' => $request->url,
-                'isDefault' => $request->isDefault ? $request->isDefault:0,
-                'created_by' => Auth::id(),
-                'last_modified_by' => Auth::id(),
-
-            ]);
-            $request->session()->flash('status', 'You created a new theme successfully!');
-
-            return redirect('admin/themes');
-        }
-        else{
-
-            return redirect()->back()->withErrors(['error' => 'You cannot make a second default theme!']);
+        if(!$this->isDefaultHasYes($request)) {
+            Theme::where('isDefault', 1)->update(['isDefault' => 0]);
         }
 
+        Theme::create([
+            'name' => $request->name,
+            'url' => $request->url,
+            'isDefault' => $request->isDefault ? $request->isDefault:0,
+            'created_by' => Auth::id(),
+            'last_modified_by' => Auth::id(),
+
+        ]);
+        $request->session()->flash('status', 'You created a new theme successfully!');
+
+        return redirect('admin/themes');
 
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -80,10 +75,10 @@ class AdminThemeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, Theme $theme)
     {
         $request->user()->authorizeRoles(['theme_manager']);
-        $theme = Theme::find($id);
+
         return view('theme.edit',compact('theme'));
 
     }
@@ -95,31 +90,26 @@ class AdminThemeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Theme $theme)
     {
         $request->user()->authorizeRoles(['theme_manager']);
 
         $this->validateTheme();
 
-        if($this->isDefaultHasYes($request))
-        {
-            Theme::where('id', $id)
-                ->update(['name' => $request->name,
-                        'url'=>$request->url,
-                        'isDefault' => $request->isDefault ? $request->isDefault:0,
-                        'last_modified_by' => Auth::id(),
-
-                    ]
-                );
-            $request->session()->flash('status', 'You updated a theme successfully!');
-
-            return redirect('/admin/themes');
-        }
-        else {
-
-            return redirect()->back()->withErrors([ 'error' => 'You cannot make a second default theme!']);
+        if(!$this->isDefaultHasYes($request)) {
+            Theme::where('isDefault', 1)->update(['isDefault' => 0]);
         }
 
+        $theme->update(['name' => $request->name,
+                    'url'=>$request->url,
+                    'isDefault' => $request->isDefault ? $request->isDefault:0,
+                    'last_modified_by' => Auth::id(),
+
+                ]
+            );
+        $request->session()->flash('status', 'You updated a theme successfully!');
+
+        return redirect('/admin/themes');
 
     }
 
@@ -129,20 +119,21 @@ class AdminThemeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Theme $theme)
     {
         $request->user()->authorizeRoles(['theme_manager']);
-        $t = Theme::find($id);
-        if(!$t->isDefault){
-            $t->update(['deleted_by' => Auth::id()]);
-            $t->delete();
+
+        if(!$theme->isDefault){
+            DB::transaction(function ($theme) {
+                $theme->update(['deleted_by' => Auth::id()]);
+                $theme->delete();
+            });
 
             $request->session()->flash('status', 'You deleted a theme successfully!');
             return redirect('/admin/themes');
         }
         else {
             $request->session()->flash('status', 'You cannot delete a default theme!');
-
             return redirect('/admin/themes');
         }
 

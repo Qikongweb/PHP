@@ -11,13 +11,13 @@
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="name" value={{old('name')}} name="name">
+                <input type="text" class="form-control" id="name"  name="name">
             </div>
         </div>
         <div class="form-group row">
             <label for="url" class="col-sm-2 col-form-label">CDN Url</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control"  value={{old('url')}} name="url">
+                <input type="text" class="form-control"   name="url">
             </div>
         </div>
         <div class="form-group row">
@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Submit</button>
+        <button class="btn btn-primary my-2 my-sm-0" type="submit">Submit</button>
 
         @include('errors')
 

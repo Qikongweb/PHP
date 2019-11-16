@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
 @section('users')
-    @if (session('status'))
-        <div class="alert alert-dismissible alert-warning alert-danger" role="alert">
-            {{ session('status') }}
-        </div>
-    @endif
+    @include('message')
 
     <div class="container">
         <div class="row">

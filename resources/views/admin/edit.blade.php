@@ -1,15 +1,8 @@
-
-
 @extends('layouts.app')
 
 @section('users')
-    @if (session('theme_create'))
-        <div class="alert alert-dismissible alert-warning alert-danger" role="alert">
-            {{ session('theme_create') }}
-        </div>
-    @endif
 
-
+    @include('message')
 
 <h1 class="card-title">Users Administration - Edit</h1>
 
@@ -40,20 +33,20 @@
             <div class="col-sm-10 ">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="1" name="type[]" {{ $user->is(1) ? 'checked':'' }}>
-                        User Administrator
-                    </label>
-                </div>
-                <div class="form-check ">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="2" name="type[]" {{ $user->is(2) ? 'checked':'' }}>
+                        <input class="form-check-input" type="checkbox" value="1" name="type[]" {{ $user->is("post_moderator") ? 'checked':'' }}>
                         PostModerator
                     </label>
                 </div>
                 <div class="form-check ">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="3" name="type[]" {{ $user->is(3) ? 'checked':'' }}>
+                        <input class="form-check-input" type="checkbox" value="2" name="type[]" {{ $user->is("theme_manager") ? 'checked':'' }}>
                         Theme Manager
+                    </label>
+                </div>
+                <div class="form-check ">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="3" name="type[]" {{ $user->id === 1 ? "disabled": ""}} {{ $user->is("user_administrators") ? 'checked':'' }} >
+                        User Administrator
                     </label>
                 </div>
             </div>
