@@ -4,12 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Theme extends Model
 {
     use Notifiable;
-    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -23,11 +21,6 @@ class Theme extends Model
     public function userCreate()
     {
         return $this->belongsTo('App\User','created_by');
-    }
-
-    public function userDelete()
-    {
-        return $this->belongsTo('App\User','deleted_by');
     }
 
     public function userModify()

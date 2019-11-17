@@ -24,7 +24,10 @@
         <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">Make Default Theme</label>
             <div class="col-sm-10">
-                <input class="form-check-input" type="checkbox" value="1" name="isDefault" style="width:40em;height:2em" {{ old('isDefault',$theme->isDefault) ? 'checked' : '' }} >
+
+                <input class="form-check-input" type="checkbox" value="1" name="isDefault" style="width:40em;height:2em" {{ $theme->isDefault? 'checked disabled' : '' }}  />
+{{--                <input class="form-check-input" type="hidden" value="3" name="isDefault[]" style="width:40em;height:2em" {{ $theme->isDefault? 'checked' : '' }}  />--}}
+
             </div>
         </div>
 

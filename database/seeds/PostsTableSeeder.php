@@ -50,6 +50,26 @@ class PostsTableSeeder extends Seeder
             'created_at' => Carbon\Carbon::now(),
             'updated_at' => Carbon\Carbon::now(),
         ]);
+
+        DB::table('posts')->insert([
+            'title' => 'The Ultimate Guide',
+            'caption' => 'Don’t sweat the stuff you can’t control. Life is much too short to be angry & annoyed all the time. Did you miss your bus? No worries, there will be another one.',
+            'image_url' => 'https://expertvagabond.com/wp-content/uploads/useful-travel-tips-blog-900x600.jpg',
+            'created_by' => 1,
+            'last_modified_by' => 1,
+            'created_at' => Carbon\Carbon::now(),
+            'updated_at' => Carbon\Carbon::now(),
+        ]);
+
+        DB::table('posts')->insert([
+            'title' => 'Serengeti Safari Notes',
+            'caption' => 'Serengeti National Park in Tanzania is visited every year by a lot of turists who are coming for an African Safari. There you will able to see lions, elephants, leopards, rhinos and buffalos, which are known as "The Big Five Of Africa".',
+            'image_url' => 'https://travelphotostory.com/post/image/6_bn_20174963949128_8583.jpg',
+            'created_by' => 1,
+            'last_modified_by' => 1,
+            'created_at' => Carbon\Carbon::now(),
+            'updated_at' => Carbon\Carbon::now(),
+        ]);
     }
 
 }

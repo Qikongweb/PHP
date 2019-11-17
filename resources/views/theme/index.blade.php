@@ -4,11 +4,12 @@
 
 @include('message')
 
+
 <h1 class="card-title">Bootstrap Themes Administration</h1>
 
     {{ csrf_field() }}
 
-<button type="button" class="btn btn-info"><a href="{{ route('create') }}" class="nav-link">Create New</a></button>
+<button type="button" class="btn btn-info" onclick="window.location.href='/admin/themes/create'">Create New</button>
 <table class="table table-hover">
     <thead>
     <tr>
@@ -24,8 +25,8 @@
         <th scope="row">{{ $theme->name }}</th>
         <td>{{ $theme->url }}</td>
         <td>{{ $theme->isDefault ? 'Yes' : 'No' }}</td>
-        <td>
-            <button type="button" class="btn btn-success"><a href="/admin/themes/{{ $theme->id }}/edit">Edit</a></button>
+        <td width="15%">
+            <button type="button" class="btn btn-success" onclick="window.location.href='/admin/themes/{{ $theme->id }}/edit'">Edit</button>
             <form action='/admin/themes/{{ $theme->id }}' method="post" class="d-inline" >
 
                 {{ method_field('DELETE') }}

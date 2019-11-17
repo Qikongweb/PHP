@@ -30,7 +30,6 @@ class PostController extends Controller
             ->get();
 
         $themes = Theme ::all();
-
         return view("posts.index",compact('posts','themes'));
     }
 

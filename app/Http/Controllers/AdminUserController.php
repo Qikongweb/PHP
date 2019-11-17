@@ -40,7 +40,9 @@ class AdminUserController extends Controller
 
         })->get();
 
-        return view('admin.index',compact('users'));
+        $sel = '';
+
+        return view('admin.index',compact('users','sel'));
 
     }
 
@@ -103,7 +105,9 @@ class AdminUserController extends Controller
             return redirect('/admin/users');
         }
         else {
-            return redirect()->back()->withErrors('error','You cannot delete a root user!');
+            $request->session()->flash('status', 'You cannot delete a default theme!');
+
+            return redirect()->back();
         }
 
     }

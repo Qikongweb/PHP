@@ -46,6 +46,8 @@
                 <div class="form-check ">
                     <label class="form-check-label">
                         <input class="form-check-input" type="checkbox" value="3" name="type[]" {{ $user->id === 1 ? "disabled": ""}} {{ $user->is("user_administrators") ? 'checked':'' }} >
+                        <input class="form-check-input" type="hidden" value={{ $user->id ===1 ? '3':'' }} name="type[]"  >
+
                         User Administrator
                     </label>
                 </div>

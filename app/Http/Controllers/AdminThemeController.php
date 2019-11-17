@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use App\Theme;
 use Illuminate\Support\Facades\Auth;
 use DB;
-use App\User;
-
+//use Illuminate\Support\Facades\Cookie;
+use Cookie;
 class AdminThemeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth'); //->only(['store','update']);
+        $this->middleware('auth', ['except' => 'show']); //->only(['store','update']);
     }
 
     /**
@@ -51,7 +51,7 @@ class AdminThemeController extends Controller
 
         $this->validateTheme();
 
-        if(!$this->isDefaultHasYes($request)) {
+        if($request->isDefault) {
             Theme::where('isDefault', 1)->update(['isDefault' => 0]);
         }
 
@@ -75,6 +75,18 @@ class AdminThemeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function show($id)
+    {
+
+        Cookie::queue('theme', Theme::find($id)->url);
+
+//        $cookie = $request->cookie('theme');
+
+        return redirect('/feed');
+    }
+
+
     public function edit(Request $request, Theme $theme)
     {
         $request->user()->authorizeRoles(['theme_manager']);
@@ -96,17 +108,26 @@ class AdminThemeController extends Controller
 
         $this->validateTheme();
 
-        if(!$this->isDefaultHasYes($request)) {
-            Theme::where('isDefault', 1)->update(['isDefault' => 0]);
-        }
-
-        $theme->update(['name' => $request->name,
+        if($theme->isDefault OR !$request->isDefault)
+        {
+            $theme->update(['name' => $request->name,
                     'url'=>$request->url,
-                    'isDefault' => $request->isDefault ? $request->isDefault:0,
                     'last_modified_by' => Auth::id(),
-
                 ]
             );
+        }
+        else
+        {
+                Theme::where('isDefault', 1)->update(['isDefault' => 0]);
+                $theme->update(['name' => $request->name,
+                        'url'=>$request->url,
+                        'isDefault' => 1,
+                        'last_modified_by' => Auth::id(),
+                    ]
+                );
+
+        }
+
         $request->session()->flash('status', 'You updated a theme successfully!');
 
         return redirect('/admin/themes');
@@ -124,17 +145,14 @@ class AdminThemeController extends Controller
         $request->user()->authorizeRoles(['theme_manager']);
 
         if(!$theme->isDefault){
-            DB::transaction(function ($theme) {
-                $theme->update(['deleted_by' => Auth::id()]);
-                $theme->delete();
-            });
+            $theme->delete();
 
             $request->session()->flash('status', 'You deleted a theme successfully!');
             return redirect('/admin/themes');
         }
         else {
             $request->session()->flash('status', 'You cannot delete a default theme!');
-            return redirect('/admin/themes');
+            return redirect()->back();
         }
 
     }
@@ -149,13 +167,5 @@ class AdminThemeController extends Controller
         ]);
     }
 
-    protected function isDefaultHasYes(Request $request){
-       if($request->isDefault AND \DB::table('themes')->where('isDefault', '=', 1)->get()->isEmpty())
-       {
-           return true;
-       }
-        else if(!$request->isDefault){
-            return true;
-        }
-    }
+
 }

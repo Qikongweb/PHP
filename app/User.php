@@ -55,11 +55,6 @@ class User extends Authenticatable
         return $this->hasMany('App\Theme','last_modified_by');
     }
 
-    public function themeDelete()
-    {
-        return $this->hasMany('App\Theme','deleted_by');
-    }
-
     // relationship with post
     public function postCreate()
     {
@@ -76,6 +71,21 @@ class User extends Authenticatable
         return $this->hasMany('App\Post','deleted_by');
     }
 
+    //relationship useritself
+    public function userItselfCreate()
+    {
+        return $this->hasMany('App\User','created_by');
+    }
+
+    public function userItselfModify()
+    {
+        return $this->hasMany('App\User','last_modified_by');
+    }
+
+    public function userItselftDelete()
+    {
+        return $this->hasMany('App\User','deleted_by');
+    }
 
     // set the checkbox
     public function is($roleName)

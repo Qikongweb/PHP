@@ -17,10 +17,8 @@
 {{--    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">--}}
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-{{--    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css" rel="stylesheet" integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k" crossorigin="anonymous">--}}
-    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/journal/bootstrap.min.css" rel="stylesheet" integrity="sha384-ciphE0NCAlD2/N6NUApXAN2dAs/vcSAOTzyE202jJx3oS8n4tAQezRgnlHqcJ59C" crossorigin="anonymous">
-
-
+    <link href={{ App\Theme::where('isDefault',1)->first()->url }} rel="stylesheet">
+    <link href="{{ app('request')->cookie('theme') }}" rel="stylesheet">
 </head>
 <body>
 {{--class="navbar navbar-expand-md navbar-light navbar-laravel"--}}
@@ -34,17 +32,17 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav mr-auto ">
                         <li>Social Feeds</li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ">
                         <!-- Authentication Links -->
                         @auth
-                            @if(app('request')->user()->hasAnyRole(['user_administrators','theme_manager','post_moderator']) )
+                            @if(app('request')->user()->hasAnyRole(['user_administrators','theme_manager']) )
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         Admin <span class="caret"></span>
@@ -71,7 +69,7 @@
                             @endif
                         @endauth
                     </ul>
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ">
 
                         <!-- Authentication Links -->
                         @guest

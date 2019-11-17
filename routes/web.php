@@ -19,9 +19,11 @@ Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home',function (){
-    return redirect('feed');
+    return redirect('/feed');
 });
 
+
+// post home page
 Route::get('/feed','PostController@index');
 
 Route::resource('/posts', 'PostController');
@@ -30,10 +32,12 @@ Route::resource('/admin/users','AdminUserController',['names' => [
     'index' => 'user'
 ]]);
 
-Route::post('/admin/users/search','AdminSearchController@index')->name('usersearch');
+Route::post('/admin/users/search','AdminSearchController@index');//->name('usersearch');
+
+Route::get('/admin/users/search/clients','AdminSearchController@showClients');
+Route::get('/admin/users/search/adminUsers','AdminSearchController@showAdminUsers');
 
 Route::resource('/admin/themes','AdminThemeController',['names' => [
-    'index' => 'theme',
-    'create' => 'create'
+    'index' => 'theme'
 ]]);
 

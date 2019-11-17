@@ -26,10 +26,6 @@ class CreateThemesTable extends Migration
             $table->unsignedInteger('last_modified_by')->nullable();
             $table->foreign('last_modified_by')->references('id')->on('users');
 
-            $table->unsignedInteger('deleted_by')->nullable();
-            $table->foreign('deleted_by')->references('id')->on('users');
-
-            $table->softDeletes();
             $table->timestamps();
         });
     }
