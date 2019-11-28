@@ -33,16 +33,6 @@ class Post extends Model
         return $this->belongsTo('App\User','last_modified_by');
     }
 
-    public static function getPostsData(){
 
-        $posts = \DB::table('posts')
-            ->join('users', 'users.id', '=', 'posts.created_by')
-            ->select('posts.id','posts.title','posts.caption','posts.image_url','posts.created_at','users.name')
-            ->whereNull('posts.deleted_at')
-            ->orderBy('posts.created_at', 'desc')
-            ->get();
 
-        return $posts;
-
-    }
 }

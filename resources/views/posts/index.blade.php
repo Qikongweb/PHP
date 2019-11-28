@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="card-footer text-muted">
-                                Posted {{ Carbon\Carbon::parse($post->created_at)->diffForHumans() }} minutes ago by  {{ $post->name }}
+                                Posted {{ Carbon\Carbon::parse($post->created_at)->diffForHumans() }} by  {{ $post->name }}
                             </div>
                         </div>
                     </div>
@@ -50,27 +50,31 @@
 @section('footer_scripts')
 
     $(document).ready(function(){
+
         function send(){
 
+            var url = `http://localhost:8000/feed/ajax/`;
             $.ajax({
-                url: 'http://localhost:8000/feed/ajax',
+                url: url,
                 type: "get",
                 dataType: 'json',
                 success:function(response)
                 {
-                    console.log(response['data'])
-                    $('#postCard').empty();
-                    response.data.forEach(item=>{cardInsert(item)})
+
+                    if(response.length > 0 )
+                    {
+                        cardInsert(response[0])
+                    }
 
                     setTimeout(function(){
-                    send();
-                    }, 10000);
+                        send();
+                    }, 6000);
                 }
             });
         }
         //Call our function
-                    send();
-        setTimeout(send, 10000)
+
+        setTimeout(send, 1000)
     });
 
     function cardInsert(data) {
@@ -78,11 +82,11 @@
         var time2 = new Date();
         const timediff = diff_minutes(time1, time2);
 
-        $('#postCard').append(
+        $('#postCard').prepend(
         `<div class="col-md-6">
             <div class="card mb-3">
 
-                <img style="height: 200px; width: 100%; display: block;" alt="Card image" class="cardImage" src= />
+                <img style="height: 200px; width: 100%; display: block;" alt="Card image" class="cardImage"  />
                 <div class="card-body">
                     <h5 class="card-title">${data.title}</h5>
                     <p class="card-text">${data.caption}</p>
@@ -95,7 +99,7 @@
             </div>
         </div>`
         )
-        $('img').eq(data.id-1).attr('src',data.image_url);
+        $('img').eq(0).attr('src',data.image_url);
     }
 
     function diff_minutes(dt2, dt1) {

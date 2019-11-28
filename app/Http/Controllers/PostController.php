@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Theme;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+
 
     public function __construct()
     {
@@ -19,6 +21,7 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
 
@@ -30,6 +33,7 @@ class PostController extends Controller
             ->get();
 
         $themes = Theme ::all();
+
         return view("posts.index",compact('posts','themes'));
     }
 
@@ -68,7 +72,6 @@ class PostController extends Controller
     }
 
 
-
     public function destroy(Request $request,Post $post)
     {
         $request->user()->authorizeRoles(['post_moderator']);
@@ -90,10 +93,19 @@ class PostController extends Controller
     }
 
     public function showPostsRecores() {
-        // Fetch all records
-        $postData['data'] = Post::getPostsData();
 
-        echo json_encode($postData);
+        $posts = \DB::table('posts')
+            ->join('users', 'users.id', '=', 'posts.created_by')
+            ->select('posts.id','posts.title','posts.caption','posts.image_url','posts.created_at','users.name')
+            ->where('posts.created_at', '>', \Carbon\Carbon::now()->subSeconds(10))
+            ->get();
+
+//        if($posts[0]->isEmpty()) $posts = [];
+        echo json_encode($posts);
         exit;
+
     }
+
+
+
 }
