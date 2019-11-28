@@ -13,6 +13,7 @@ class AdminThemeController extends Controller
     public function __construct()
     {
         $this->middleware('auth', ['except' => 'show']); //->only(['store','update']);
+        $this->middleware('themeUsers', ['except' => 'show']);
     }
 
     /**
@@ -22,7 +23,6 @@ class AdminThemeController extends Controller
      */
     public function index(Request $request)
     {
-        $request->user()->authorizeRoles(['theme_manager']);
         $themes = Theme::all();
         return view('theme.index',compact('themes'));
     }
@@ -34,7 +34,6 @@ class AdminThemeController extends Controller
      */
     public function create(Request $request)
     {
-        $request->user()->authorizeRoles(['theme_manager']);
         return view('theme.create');
     }
 
@@ -46,8 +45,6 @@ class AdminThemeController extends Controller
      */
     public function store(Request $request)
     {
-
-        $request->user()->authorizeRoles(['theme_manager']);
 
         $this->validateTheme();
 
@@ -89,10 +86,7 @@ class AdminThemeController extends Controller
 
     public function edit(Request $request, Theme $theme)
     {
-        $request->user()->authorizeRoles(['theme_manager']);
-
         return view('theme.edit',compact('theme'));
-
     }
 
     /**
@@ -104,7 +98,6 @@ class AdminThemeController extends Controller
      */
     public function update(Request $request, Theme $theme)
     {
-        $request->user()->authorizeRoles(['theme_manager']);
 
         $this->validateTheme();
 
@@ -142,7 +135,6 @@ class AdminThemeController extends Controller
      */
     public function destroy(Request $request, Theme $theme)
     {
-        $request->user()->authorizeRoles(['theme_manager']);
 
         if(!$theme->isDefault){
             $theme->delete();

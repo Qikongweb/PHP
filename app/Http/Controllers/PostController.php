@@ -15,6 +15,7 @@ class PostController extends Controller
     public function __construct()
     {
         $this->middleware('auth', ['except' => ['index', 'showPostsRecores']]);
+        $this->middleware('postUsers')->only(['destroy']);
     }
     /**
      * Display a listing of the resource.
@@ -56,15 +57,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validatePosts($request);
-        Post::create([
-                'title' => $request->title,
-                'image_url' => $request->image_url,
-                'caption' => $request->caption,
-                'created_by' => Auth::id(),
-                'last_modified_by' => Auth::id(),
 
-            ]);
+        Post::create($this->validatePosts($request));
         $request->session()->flash('status', 'You created a new post successfully!');
 
         return redirect('/feed');
@@ -74,7 +68,7 @@ class PostController extends Controller
 
     public function destroy(Request $request,Post $post)
     {
-        $request->user()->authorizeRoles(['post_moderator']);
+//        $request->user()->authorizeRoles(['post_moderator']);
 
         $post->update(['deleted_by' => Auth::id()]);
         $post->delete();
@@ -85,11 +79,16 @@ class PostController extends Controller
 
     private function validatePosts(Request $request)
     {
-        return request()->validate([
+        $attributes = request()->validate([
             'title' => ['required'],
             'caption' => ['required'],
             'image_url' => ['required']
         ]);
+        $attributes['created_by'] = Auth::id();
+        $attributes['last_modified_by'] = Auth::id();
+
+        return $attributes;
+
     }
 
     public function showPostsRecores() {

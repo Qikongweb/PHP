@@ -18,14 +18,13 @@ class AdminUserController extends Controller
     public function __construct()
     {
         $this->middleware('auth'); //->only(['store','update']);
-//        $this->middleware('adminUsers');
+        $this->middleware('adminUsers');
     }
 
 
     public function index(Request $request)
     {
-        $request->user()->authorizeRoles(['user_administrators']);
-
+//        $request->user()->authorizeRoles(['user_administrators']);
 
 //        $users = \DB::table('users')
 //                ->join('role_user', 'users.id', '=', 'role_user.user_id')
@@ -57,8 +56,7 @@ class AdminUserController extends Controller
      */
     public function edit(Request $request, User $user)
     {
-        $request->user()->authorizeRoles([ 'user_administrators']);
-
+//        $request->user()->authorizeRoles([ 'user_administrators']);
         return view('admin.edit',compact('user'));
 
     }
@@ -72,16 +70,9 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $request->user()->authorizeRoles([ 'user_administrators']);
+//        $request->user()->authorizeRoles([ 'user_administrators']);
 
-        $this->validateUser();
-        $user->update(
-                [
-                    'name' => $request->name,
-                    'email'=>$request->email,
-                    'last_modified_by' => Auth::id(),
-                    ]
-            );
+        $user->update($this->validateUser());
         $user->roles()->sync($request->type);
 
         $request->session()->flash('status', 'You updated a user successfully!');
@@ -96,14 +87,13 @@ class AdminUserController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-        $request->user()->authorizeRoles(['user_administrators']);
+//        $request->user()->authorizeRoles(['user_administrators']);
         if($user->id !== 1){
 
             $user->update(['deleted_by' => Auth::id()]);
             $user->delete();
 
             $request->session()->flash('status', 'You deleted a user successfully!');
-
             return redirect('/admin/users');
         }
         else {
@@ -116,11 +106,13 @@ class AdminUserController extends Controller
 
     protected function validateUser()
     {
-        return request()->validate([
+        $attributes = request()->validate([
             'name' => ['required','min:3','max:255'],
             'email' => ['required','email'],
 
         ]);
+        $attributes['last_modified_by'] =  Auth::id();
+        return $attributes;
     }
 
 
