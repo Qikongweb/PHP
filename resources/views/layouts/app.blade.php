@@ -17,8 +17,14 @@
 {{--    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">--}}
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href={{ App\Theme::where('isDefault',1)->first()->url }} rel="stylesheet">
-    <link href="{{ app('request')->cookie('theme') }}" rel="stylesheet">
+
+    @if( app('request')->cookie('theme') )
+        <link href="{{ app('request')->cookie('theme') }}" rel="stylesheet">
+    @else
+        <link href={{ App\Theme::where('isDefault',1)->first()->url }} rel="stylesheet">
+    @endif
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 </head>
 <body>
 {{--class="navbar navbar-expand-md navbar-light navbar-laravel"--}}
@@ -117,5 +123,10 @@
 
         </div>
     </div>
+<script type="text/javascript">
+    @yield ('footer_scripts')
+
+</script>
+
 </body>
 </html>

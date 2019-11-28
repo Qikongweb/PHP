@@ -18,12 +18,14 @@ class AdminUserController extends Controller
     public function __construct()
     {
         $this->middleware('auth'); //->only(['store','update']);
+//        $this->middleware('adminUsers');
     }
 
 
     public function index(Request $request)
     {
         $request->user()->authorizeRoles(['user_administrators']);
+
 
 //        $users = \DB::table('users')
 //                ->join('role_user', 'users.id', '=', 'role_user.user_id')

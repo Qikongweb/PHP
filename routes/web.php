@@ -24,7 +24,8 @@ Route::get('/home',function (){
 
 
 // post home page
-Route::get('/feed','PostController@index');
+Route::get('/feed','PostController@index')->name('feedHome');
+Route::get('feed/ajax','PostController@showPostsRecores');
 
 Route::resource('/posts', 'PostController');
 
@@ -40,4 +41,5 @@ Route::get('/admin/users/search/adminUsers','AdminSearchController@showAdminUser
 Route::resource('/admin/themes','AdminThemeController',['names' => [
     'index' => 'theme'
 ]]);
+
 

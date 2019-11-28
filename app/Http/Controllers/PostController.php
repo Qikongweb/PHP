@@ -12,7 +12,7 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth', ['except' => 'index']);
+        $this->middleware('auth', ['except' => ['index', 'showPostsRecores']]);
     }
     /**
      * Display a listing of the resource.
@@ -87,5 +87,13 @@ class PostController extends Controller
             'caption' => ['required'],
             'image_url' => ['required']
         ]);
+    }
+
+    public function showPostsRecores() {
+        // Fetch all records
+        $postData['data'] = Post::getPostsData();
+
+        echo json_encode($postData);
+        exit;
     }
 }

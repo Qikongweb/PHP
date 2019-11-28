@@ -10,7 +10,7 @@
                 <h1 class="card-title">Create a Post</h1><br><br>
 
                 <div class="row">
-                    <form  action="/posts/" method="post" style="width:100%;">
+                    <form  action="/posts/" method="post" style="width:100%;" id="contact_us" onsubmit="formupdate()">
 
                         {{ csrf_field() }}
 
