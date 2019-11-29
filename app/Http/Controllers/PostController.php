@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Theme;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +15,7 @@ class PostController extends Controller
     {
         $this->middleware('auth', ['except' => ['index', 'showPostsRecores']]);
         $this->middleware('postUsers')->only(['destroy']);
+
     }
     /**
      * Display a listing of the resource.
@@ -27,15 +27,19 @@ class PostController extends Controller
     {
 
         $posts = \DB::table('posts')
-            ->join('users', 'users.id', '=', 'posts.created_by')
-            ->select('posts.id','posts.title','posts.caption','posts.image_url','posts.created_at','users.name')
-            ->whereNull('posts.deleted_at')
-            ->orderBy('posts.created_at', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $themes = Theme ::all();
 
         return view("posts.index",compact('posts','themes'));
+    }
+
+    public function show(Request $request, Post $post)
+    {
+        $themes = Theme ::all();
+        return view('posts.show',compact('post','themes'));
+
     }
 
     /**
@@ -93,15 +97,19 @@ class PostController extends Controller
 
     public function showPostsRecores() {
 
-        $posts = \DB::table('posts')
-            ->join('users', 'users.id', '=', 'posts.created_by')
-            ->select('posts.id','posts.title','posts.caption','posts.image_url','posts.created_at','users.name')
-            ->where('posts.created_at', '>', \Carbon\Carbon::now()->subSeconds(10))
-            ->get();
+        $post = \DB::table('posts')
+//                ->where('id',5)
+                ->where('posts.created_at', '>', \Carbon\Carbon::now()->subSeconds(6))
+                ->get();
 
-//        if($posts[0]->isEmpty()) $posts = [];
-        echo json_encode($posts);
-        exit;
+        if(!$post->isEmpty()) {
+
+            return view('posts.signalDiv', (['post' => $post[0]]));
+        }
+        else{
+            return "";
+        }
+
 
     }
 

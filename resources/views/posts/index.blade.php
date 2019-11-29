@@ -12,7 +12,7 @@
                         <div class="col-md-6">
                             <div class="card mb-3">
 
-                            <img style="height: 200px; width: 100%; display: block;" alt="Card image" class="cardImage" src={{ $post->image_url }} />
+                                <img style="height: 200px; width: 100%; display: block;" alt="Card image" class="cardImage" src={{ $post->image_url }} onclick="window.location.href='/posts/{{ $post->id }}'"/>
                             <div class="card-body">
                                 <h5 class="card-title">{{ $post->title }}</h5>
                                 <p class="card-text">{{ $post->caption }}</p>
@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="card-footer text-muted">
-                                Posted {{ Carbon\Carbon::parse($post->created_at)->diffForHumans() }} by  {{ $post->name }}
+                                Posted {{ Carbon\Carbon::parse($post->created_at)->diffForHumans() }} by  {{ App\User::find($post->created_by)->name }}
                             </div>
                         </div>
                     </div>
@@ -57,14 +57,11 @@
             $.ajax({
                 url: url,
                 type: "get",
-                dataType: 'json',
+{{--                dataType: 'text',--}}
                 success:function(response)
                 {
-
-                    if(response.length > 0 )
-                    {
-                        cardInsert(response[0])
-                    }
+                    console.log(response)
+                    $('#postCard').prepend(response)
 
                     setTimeout(function(){
                         send();
@@ -77,50 +74,6 @@
         setTimeout(send, 1000)
     });
 
-    function cardInsert(data) {
-        var time1 = new Date(data.created_at);
-        var time2 = new Date();
-        const timediff = diff_minutes(time1, time2);
 
-        $('#postCard').prepend(
-        `<div class="col-md-6">
-            <div class="card mb-3">
-
-                <img style="height: 200px; width: 100%; display: block;" alt="Card image" class="cardImage"  />
-                <div class="card-body">
-                    <h5 class="card-title">${data.title}</h5>
-                    <p class="card-text">${data.caption}</p>
-
-                </div>
-
-                <div class="card-footer text-muted">
-                    Posted ${timediff} ago by  ${ data.name }
-                </div>
-            </div>
-        </div>`
-        )
-        $('img').eq(0).attr('src',data.image_url);
-    }
-
-    function diff_minutes(dt2, dt1) {
-
-        var diff = (dt2.getTime() - dt1.getTime()) / 1000;
-        if(Math.abs(Math.round(diff/3600/24))>1)
-        {
-            return Math.abs(Math.round(diff/3600/24))+" days"
-        }
-        else if(Math.abs(Math.round(diff/3600))>1)
-        {
-            return Math.abs(Math.round(diff/3600)) + " hours"
-        }
-        else if(Math.abs(Math.round(diff/60))>1)
-        {
-            return Math.abs(Math.round(diff/60)) + " minutes"
-        }
-        else
-        {
-            return Math.abs(Math.round(diff)) + " seconds"
-        }
-    }
 
 @endsection

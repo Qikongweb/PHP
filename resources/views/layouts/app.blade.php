@@ -123,6 +123,16 @@
 
         </div>
     </div>
+
+<footer class="page-footer font-small blue" style="margin-top:50px">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2018 Copyright:
+        <a href="/home"> Go to homepage</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
 <script type="text/javascript">
     @yield ('footer_scripts')
 

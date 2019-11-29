@@ -42,4 +42,6 @@ Route::resource('/admin/themes','AdminThemeController',['names' => [
     'index' => 'theme'
 ]]);
 
+Route::post('/posts/{post}/comments','PostCommentsController@store');
+
 

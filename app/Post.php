@@ -33,6 +33,9 @@ class Post extends Model
         return $this->belongsTo('App\User','last_modified_by');
     }
 
-
+    public function comments()
+    {
+        return $this->hasMany('App\Comment','post_id');
+    }
 
 }

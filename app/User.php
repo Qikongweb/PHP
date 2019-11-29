@@ -87,6 +87,11 @@ class User extends Authenticatable
         return $this->hasMany('App\User','deleted_by');
     }
 
+    public function comments()
+    {
+        return $this->hasMany('App\Comment','user_id');
+    }
+
     // set the checkbox
     public function is($roleName)
     {
